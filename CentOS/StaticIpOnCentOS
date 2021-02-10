@@ -1,0 +1,30 @@
+login as root
+
+# update IP: 
+ifconfig <interface> <IP> netmask 255.255.240.0
+
+# update gateway: 
+route add default gw 10.6.96.1 <interface>
+
+# Override /etc/resolv.conf:
+
+cat >/etc/resolv.conf<<EOF
+search adm.al.com.au al.com.au ds.al.com.au van.animallogic.ca
+nameserver 10.10.1.253
+nameserver 10.10.1.252
+EOF
+
+# Rename 
+/etc/X11/xorg.conf.d/10-xorg-pcoip.conf: mv /etc/X11/xorg,conf.d/10-xorg-pcoip.conf /etc/X11/xorg,conf.d/10-xorg-pcoip.conf.bak
+
+# Disable pcoip: 
+systemctl disable pcoip
+
+# Enable lightdm: 
+systemctl enable lightdm
+
+# Switch to no GUI mode: 
+systemctl isolate multi-user.target
+
+# Switch to GUI mode: 
+systemctl isolate graphical.target
